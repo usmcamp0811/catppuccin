@@ -96,6 +96,14 @@ config.options = {
 function config.set_options(opts)
 	opts = opts or {}
 	config.options = vim.tbl_deep_extend("keep", opts, config.options)
+	if config.options.custom_flavours then
+		local flavour = config.options.custom_flavours[vim.g.catppuccin_flavour]
+		if flavour then
+			config.options.color_overrides = { [flavour.inherit] = flavour.color_overrides or {} }
+			config.options.custom_highlights = flavour.custom_highlights or {}
+			vim.g.catppuccin_flavour = flavour.inherit
+		end
+	end
 	if config.options.compile.enabled ~= true then
 		pcall(vim.api.nvim_del_user_command, "CatppuccinCompile")
 		pcall(vim.api.nvim_del_user_command, "CatppuccinClean")

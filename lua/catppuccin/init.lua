@@ -1,6 +1,6 @@
 local M = {}
 
-local flavours = { "latte", "frappe", "macchiato", "mocha" }
+M.flavours = { latte = true, frappe = true, macchiato = true, mocha = true }
 
 function M.load()
 	local compiled = nil
@@ -35,7 +35,7 @@ end
 local command = vim.api.nvim_create_user_command
 
 command("Catppuccin", function(inp)
-	if not vim.tbl_contains(flavours, inp.args) then
+	if not M.flavours[inp.args] then
 		require("catppuccin.utils.echo")("Invalid flavour", "error")
 		return
 	end
@@ -46,13 +46,13 @@ end, {
 	complete = function(line)
 		return vim.tbl_filter(function(val)
 			return vim.startswith(val, line)
-		end, flavours)
+		end, vim.tbl_keys(M.flavours))
 	end,
 })
 
 for _, cmd in ipairs({ "compile", "clean", "status" }) do
 	M[cmd] = function()
-		for _, flavour in ipairs(flavours) do
+		for flavour, _ in ipairs(M.flavours) do
 			vim.g.catppuccin_flavour = flavour
 			require("catppuccin.lib.compiler")[cmd](flavour)
 		end
