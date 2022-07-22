@@ -7,7 +7,7 @@ function M.load()
 	local config = require("catppuccin.config").options
 
 	if vim.g.catppuccin_flavour == nil then -- Default catppuccin flavour to macchiato
-		vim.g.catppuccin_flavour = "macchiato"
+		vim.g.catppuccin_flavour = "mocha"
 	end
 
 	if config.compile.enabled == true then
